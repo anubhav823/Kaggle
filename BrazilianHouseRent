@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+from scipy.stats import pearsonr
 
 df=pd.read_csv("C:/Users/anubh/Desktop/houses_to_rent.csv")
 df.describe()
@@ -59,4 +59,14 @@ def remove_outlier(df_in, col_name):
 df=remove_outlier(df,"area")
 sns.boxplot(x=df['area'])
 df.shape
-sns.boxplot(x=df['])
+sns.boxplot(x=df['rooms'])
+df=remove_outlier(df,"rooms")
+sns.boxplot(x=df.bathroom)
+
+sns.boxplot(x=df['parking spaces'])
+df=remove_outlier(df,'parking spaces')
+df['floor']=df.floor.replace(to_replace=0,value="0")
+
+del df['property tax']
+
+plt.bar(df['floor'], df['total']) 
