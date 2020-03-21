@@ -1,0 +1,62 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Dec 28 22:05:18 2019
+
+@author: anubh
+"""
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
+df=pd.read_csv("C:/Users/anubh/Desktop/houses_to_rent.csv")
+df.describe()
+del df['Unnamed: 0']
+df.describe()
+
+df.replace(to_replace ="acept", 
+                 value =1,inplace=True) 
+df=df.replace(to_replace="not acept",value=0)
+df=df.replace(to_replace="furnished",value=1)
+df=df.replace(to_replace="not furnished",value=0)
+
+df.hoa=[x.strip('R$') for x in df.hoa]
+df['rent amount']=[x.strip('R$') for x in df['rent amount']]
+df['property tax']=[x.strip('R$') for x in df['property tax']]
+df['fire insurance']=[x.strip('R$') for x in df['fire insurance']]
+df['total']=[x.strip('R$') for x in df['total']]
+
+print(df['city'].unique())
+print(df['rooms'].unique())
+print(df['bathroom'].unique())
+print(df['parking spaces'].unique())
+
+df.hist()
+plt.bar(df['city'], df['total']) 
+plt.xlabel("city") 
+plt.ylabel("total") 
+plt.show() 
+
+df.plot(kind='density', subplots=True, layout=(3,3), sharex=False)
+
+df.plot.box() 
+plt.boxplot(df['total'])
+plt.show() 
+df.plot.scatter(x ='rooms', y ='area') 
+
+sns.boxplot(x=df['area'])
+
+def remove_outlier(df_in, col_name):
+    q1 = df_in[col_name].quantile(0.25)
+    q3 = df_in[col_name].quantile(0.75)
+    iqr = q3-q1 #Interquartile range
+    fence_low  = q1-1.5*iqr
+    fence_high = q3+1.5*iqr
+    df_out = df_in.loc[(df_in[col_name] > fence_low) & (df_in[col_name] < fence_high)]
+    return df_out
+
+df=remove_outlier(df,"area")
+sns.boxplot(x=df['area'])
+df.shape
+sns.boxplot(x=df['])
