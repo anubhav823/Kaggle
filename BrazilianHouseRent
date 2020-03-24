@@ -8,8 +8,13 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from scipy.stats import pearsonr
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
 
+from sklearn.metrics import mean_squared_error
 df=pd.read_csv("C:/Users/anubh/Desktop/houses_to_rent.csv")
 df.describe()
 del df['Unnamed: 0']
@@ -26,7 +31,8 @@ df['rent amount']=[x.strip('R$') for x in df['rent amount']]
 df['property tax']=[x.strip('R$') for x in df['property tax']]
 df['fire insurance']=[x.strip('R$') for x in df['fire insurance']]
 df['total']=[x.strip('R$') for x in df['total']]
-
+df.total=[x.strip(",") for x in df.total]
+'''
 print(df['city'].unique())
 print(df['rooms'].unique())
 print(df['bathroom'].unique())
@@ -46,7 +52,7 @@ plt.show()
 df.plot.scatter(x ='rooms', y ='area') 
 
 sns.boxplot(x=df['area'])
-
+'''
 def remove_outlier(df_in, col_name):
     q1 = df_in[col_name].quantile(0.25)
     q3 = df_in[col_name].quantile(0.75)
@@ -57,16 +63,54 @@ def remove_outlier(df_in, col_name):
     return df_out
 
 df=remove_outlier(df,"area")
+df=remove_outlier(df,"rooms")
+df=remove_outlier(df,"bathroom")
+df=remove_outlier(df,"parking spaces")
+df=df.replace(to_replace="-",value="0")
+
+df.floor = df['floor'].astype(int) 
+df["total"] = df["total"].str.replace(",","").astype(int)
+df=remove_outlier(df,"floor")
+
 sns.boxplot(x=df['area'])
 df.shape
 sns.boxplot(x=df['rooms'])
 df=remove_outlier(df,"rooms")
 sns.boxplot(x=df.bathroom)
 
-sns.boxplot(x=df['parking spaces'])
-df=remove_outlier(df,'parking spaces')
-df['floor']=df.floor.replace(to_replace=0,value="0")
-
+del df['rent amount']
+del df['fire insurance']
+del df['hoa']
 del df['property tax']
+sns.boxplot(x=df['parking spaces'])
 
-plt.bar(df['floor'], df['total']) 
+df.info()
+
+y=df.total
+X=df.drop(['total','animal','floor'], axis = 1) 
+
+corr=df.corr()
+
+
+    
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+lr = LinearRegression()
+
+#polynomial check
+
+rs_test=[]
+order=[1,2,3,4]
+for n in order:
+    pr=PolynomialFeatures(degree=n)
+    X_train_pr=pr.fit_transform(X_train)
+    X_test_pr=pr.fit_transform(X_test)
+    lr.fit(X_train_pr,y_train)
+    rs_test.append(lr.score(X_test_pr,y_test))
+    
+    
+regr.fit(X_train, y_train)
+pred=regr.predict(X_test)
+
+mse=mean_squared_error(y_test,pred)
+sns.regplot(y_test,pred)
+sns.residplot(y_test,pred)
