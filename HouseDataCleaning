@@ -1,0 +1,227 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Mar 26 12:49:47 2020
+
+@author: anubh
+"""
+
+import pandas as pd
+
+df=pd.read_csv('C:/Users/anubh/Desktop/house-prices-advanced-regression-techniques/train.csv')
+
+df.info()
+del df['Id']
+df['MSZoning'].unique() #array(['RL', 'RM', 'C (all)', 'FV', 'RH'], dtype=object)
+df['MSZoning'].replace(to_replace='RL',value=0,inplace=True)
+df['MSZoning'].replace(to_replace='RM',value=1,inplace=True)
+df['MSZoning'].replace(to_replace='C (all)',value=2,inplace=True)
+df['MSZoning'].replace(to_replace='FV',value=3,inplace=True)
+df['MSZoning'].replace(to_replace='RH',value=4,inplace=True)
+
+df['Street'].unique()
+df['Street'].replace(to_replace ="Pave", value =1,inplace=True) 
+df['Street'].replace(to_replace ="Grvl", value =0,inplace=True)
+
+
+df['LotShape'].unique()  #array(['Reg', 'IR1', 'IR2', 'IR3'], dtype=object)
+df['LotShape'].replace(to_replace="Reg",value=0,inplace=True)
+df['LotShape'].replace(to_replace="IR1",value=1,inplace=True)
+df['LotShape'].replace(to_replace="IR2",value=2,inplace=True)
+df['LotShape'].replace(to_replace="IR3",value=3,inplace=True)
+
+df['LandContour'].unique()  #array(['Lvl', 'Bnk', 'Low', 'HLS'], dtype=object)
+df['LandContour'].replace(to_replace="Lvl", value=0,inplace=True)
+df['LandContour'].replace(to_replace="Bnk", value=1,inplace=True)
+df['LandContour'].replace(to_replace="Low", value=2,inplace=True)
+df['LandContour'].replace(to_replace="HLS", value=3,inplace=True)
+
+df['Utilities'].unique() #array(['AllPub', 'NoSeWa'], dtype=object)
+df['Utilities'].replace(to_replace="AllPub",value=0,inplace=True)
+df['Utilities'].replace(to_replace="NoSeWa",value=1,inplace=True)
+
+df['LotConfig'].unique() #array(['Inside', 'FR2', 'Corner', 'CulDSac', 'FR3'], dtype=object)
+df['LotConfig'].replace(to_replace="Inside",value=0,inplace=True)
+df['LotConfig'].replace(to_replace="FR2",value=1,inplace=True)
+df['LotConfig'].replace(to_replace="Corner",value=2,inplace=True)
+df['LotConfig'].replace(to_replace="CulDSac",value=3,inplace=True)
+df['LotConfig'].replace(to_replace="FR3",value=4,inplace=True)
+
+df.LandSlope.unique() #array(['Gtl', 'Mod', 'Sev'], dtype=object)
+df.LandSlope.replace(to_replace="Gtl",value=0,inplace=True)
+df.LandSlope.replace(to_replace="Mod",value=1,inplace=True)
+df.LandSlope.replace(to_replace="Sev",value=2,inplace=True)
+
+df['Alley'].unique()  #array([nan, 'Grvl', 'Pave'], dtype=object)
+df['Alley']=df['Alley'].fillna(0)
+df['Alley'].replace(to_replace='Grvl',value=1,inplace=True)
+df['Alley'].replace(to_replace='Pave',value=2,inplace=True)
+
+
+df.Neighborhood.unique()
+arr={'CollgCr':0, 'Veenker':1, 'Crawfor':2, 'NoRidge':3, 'Mitchel':4, 'Somerst':5,
+       'NWAmes':6, 'OldTown':7, 'BrkSide':8, 'Sawyer':9, 'NridgHt':10, 'NAmes':11,
+       'SawyerW':12, 'IDOTRR':13, 'MeadowV':14, 'Edwards':15, 'Timber':16, 'Gilbert':17,
+       'StoneBr':18, 'ClearCr':19, 'NPkVill':20, 'Blmngtn':21, 'BrDale':22, 'SWISU':23,
+       'Blueste':24}
+df['Neighborhood']= df['Neighborhood'].map(arr) 
+
+df.Condition1.unique() #array(['Norm', 'Feedr', 'PosN', 'Artery', 'RRAe', 'RRNn', 'RRAn', 'PosA','RRNe'],
+dict={'Norm':0, 'Feedr':1, 'PosN':2, 'Artery':3, 'RRAe':4, 'RRNn':5, 'RRAn':6, 'PosA':7,
+       'RRNe':8}
+df['Condition1']=df['Condition1'].map(dict)
+
+df['Condition2'].unique() #array['Norm', 'Artery', 'RRNn', 'Feedr', 'PosN', 'PosA', 'RRAn', 'RRAe']
+dict={'Norm':0, 'Artery':1, 'RRNn':2, 'Feedr':3, 'PosN':4, 'PosA':4, 'RRAn':5, 'RRAe':6}
+df['Condition2']=df['Condition2'].map(dict)
+
+df.BldgType.unique() #array(['1Fam', '2fmCon', 'Duplex', 'TwnhsE', 'Twnhs'], dtype=object)
+dict={'1Fam':0, '2fmCon':1, 'Duplex':2, 'TwnhsE':3, 'Twnhs':4}
+df['BldgType']=df['BldgType'].map(dict)
+
+df['HouseStyle'].unique() #array(['2Story', '1Story', '1.5Fin', '1.5Unf', 'SFoyer', 'SLvl', '2.5Unf','2.5Fin']
+dict={'2Story':0, '1Story':1, '1.5Fin':2, '1.5Unf':3, 'SFoyer':4, 'SLvl':5, '2.5Unf':6,'2.5Fin':7}
+df['HouseStyle']=df['HouseStyle'].map(dict)
+
+df.RoofStyle.unique()
+dict={'Gable':0, 'Hip':1, 'Gambrel':2, 'Mansard':3, 'Flat':4, 'Shed':5}
+df['RoofStyle']=df['RoofStyle'].map(dict)
+
+df['RoofMatl'].unique()
+dict={'CompShg':0, 'WdShngl':1, 'Metal':2, 'WdShake':3, 'Membran':4, 'Tar&Grv':5,
+       'Roll':6, 'ClyTile':7}
+df['RoofMatl']=df['RoofMatl'].map(dict)
+
+df.Exterior1st.unique()
+dict={'VinylSd':0, 'MetalSd':1, 'Wd Sdng':2, 'HdBoard':3, 'BrkFace':4, 'WdShing':5,
+       'CemntBd':6, 'Plywood':7, 'AsbShng':8, 'Stucco':9, 'BrkComm':10, 'AsphShn':11,
+       'Stone':12, 'ImStucc':13, 'CBlock':14}
+df['Exterior1st']=df['Exterior1st'].map(dict)
+
+df.Exterior2nd.unique()
+dict={'VinylSd':0, 'MetalSd':1, 'Wd Shng':2, 'HdBoard':3, 'Plywood':4, 'Wd Sdng':5,
+       'CmentBd':6, 'BrkFace':7, 'Stucco':8, 'AsbShng':9, 'Brk Cmn':10, 'ImStucc':11,
+       'AsphShn':12, 'Stone':13, 'Other':14, 'CBlock':15}
+df['Exterior2nd']=df['Exterior2nd'].map(dict)
+
+df.MasVnrType.unique()
+df['MasVnrType']=df['MasVnrType'].fillna(0)
+dict={'BrkFace':1, 'None':2, 'Stone':3, 'BrkCmn':4}
+df['MasVnrType']=df['MasVnrType'].map(dict)
+
+df['ExterQual'].unique()
+dict={'Gd':0, 'TA':1, 'Ex':2, 'Fa':3}
+df['ExterQual']=df['ExterQual'].map(dict)
+
+df['ExterCond'].unique()
+dict={'Gd':0, 'TA':1, 'Ex':2, 'Fa':3,'Po':4}
+df['ExterCond']=df['ExterCond'].map(dict)
+df.info()
+
+df['Foundation'].unique()
+dict={'PConc':0, 'CBlock':1, 'BrkTil':2, 'Wood':3, 'Slab':4, 'Stone':5}
+df['Foundation']=df['Foundation'].map(dict)
+
+df['BsmtQual'].unique()
+df['BsmtQual']=df['BsmtQual'].fillna(0)
+dict={'Gd':1, 'TA':2, 'Ex':3, 'Fa':4}
+df['BsmtQual']=df['BsmtQual'].map(dict)
+
+df['BsmtCond'].unique()
+df['BsmtQual']=df['BsmtQual'].fillna(0)
+dict={'TA':1, 'Gd':2, 'Fa':3, 'Po':4}
+df['BsmtCond']=df['BsmtCond'].map(dict)
+
+df['BsmtExposure'].unique()
+df['BsmtExposure']=df['BsmtExposure'].fillna(0)
+dict={'No':1, 'Gd':2, 'Mn':3, 'Av':4}
+df['BsmtExposure']=df['BsmtExposure'].map(dict)
+
+df['BsmtFinType1'].unique()
+df['BsmtFinType1']=df['BsmtFinType1'].fillna(0)
+dict={'GLQ':1, 'ALQ':2, 'Unf':3, 'Rec':4, 'BLQ':5,'LwQ':6}
+df['BsmtFinType1']=df['BsmtFinType1'].map(dict)
+
+df['BsmtFinType2'].unique()
+df['BsmtFinType2']=df['BsmtFinType2'].fillna(0)
+dict={'Unf':1, 'BLQ':2, 'ALQ':3, 'Rec':4, 'LwQ':5, 'GLQ':6}
+df['BsmtFinType2']=df['BsmtFinType2'].map(dict)
+
+df['KitchenQual'].unique()
+dict={'Gd':0, 'TA':1, 'Ex':2, 'Fa':3}
+df['KitchenQual']=df['KitchenQual'].map(dict)
+
+df['Functional'].unique()
+dict={'Typ':0, 'Min1':1, 'Maj1':2, 'Min2':3, 'Mod':4, 'Maj2':5, 'Sev':6}
+df['Functional']=df['Functional'].map(dict)
+
+df['FireplaceQu'].unique()
+df['FireplaceQu']=df['FireplaceQu'].fillna(0)
+dict={'TA':1, 'Gd':2, 'Fa':3, 'Ex':4, 'Po':5}
+df['FireplaceQu']=df['FireplaceQu'].map(dict)
+
+df['GarageType'].unique()
+df['GarageType']=df['GarageType'].fillna(0)
+dict={'Attchd':1, 'Detchd':2, 'BuiltIn':3, 'CarPort':4, 'Basment':5, '2Types':6}
+df['GarageType']=df['GarageType'].map(dict)
+
+df['GarageFinish'].unique()
+df['GarageFinish']=df['GarageFinish'].fillna(0)
+dict={'RFn':1, 'Unf':2, 'Fin':3}
+df['GarageFinish']=df['GarageFinish'].map(dict)
+
+df['GarageQual'].unique()
+df['GarageQual']=df['GarageQual'].fillna(0)
+dict={'TA':1, 'Fa':2, 'Gd':3, 'Ex':4, 'Po':5}
+df['GarageQual']=df['GarageQual'].map(dict)
+
+df['GarageCond'].unique()
+df['GarageCond']=df['GarageCond'].fillna(0)
+dict={'TA':1, 'Fa':2,'Gd':3, 'Po':4, 'Ex':5}
+df['GarageCond']=df['GarageCond'].map(dict)
+
+df['PavedDrive'].unique()
+dict={'Y':0, 'N':1, 'P':2}
+df['PavedDrive']=df['PavedDrive'].map(dict)
+
+df['PoolQC'].unique()
+df['PoolQC']=df['PoolQC'].fillna(0)
+dict={'Ex':1, 'Fa':2, 'Gd':3}
+df['PoolQC']=df['PoolQC'].map(dict)
+
+df['Fence'].unique()
+df['Fence']=df['Fence'].fillna(0)
+dict={'MnPrv':1, 'GdWo':2, 'GdPrv':3, 'MnWw':4}
+df['Fence']=df['Fence'].map(dict)
+
+df['MiscFeature'].unique()
+df['MiscFeature']=df['MiscFeature'].fillna(0)
+dict={'Shed':1, 'Gar2':2, 'Othr':3, 'TenC':4}
+df['MiscFeature']=df['MiscFeature'].map(dict)
+
+df['SaleType'].unique()
+dict={'WD':0, 'New':1, 'COD':2, 'ConLD':3, 'ConLI':4, 'CWD':5, 'ConLw':6, 'Con':7, 'Oth':8}
+df['SaleType']=df['SaleType'].map(dict)
+
+df['SaleCondition'].unique()
+dict={'Normal':0, 'Abnorml':1, 'Partial':2, 'AdjLand':3, 'Alloca':4, 'Family':5}
+df['SaleCondition']=df['SaleCondition'].map(dict)
+
+df['Heating'].unique()
+dict={'GasA':0, 'GasW':1, 'Grav':2, 'Wall':3, 'OthW':4, 'Floor':5}
+df['Heating']=df['Heating'].map(dict)
+
+df['HeatingQC'].unique()
+dict={'Ex':0, 'Gd':1, 'TA':2, 'Fa':3, 'Po':4}
+df['HeatingQC']=df['HeatingQC'].map(dict)
+
+df['CentralAir'].unique()
+dict={'Y':1,'N':0}
+df['CentralAir']=df['CentralAir'].map(dict)
+
+df['Electrical'].unique()
+df['Electrical']=df['Electrical'].fillna(0)
+dict={'SBrkr':0, 'FuseF':1, 'FuseA':2, 'FuseP':3, 'Mix':4}
+df['Electrical']=df['Electrical'].map(dict)
+
+df.info()
+df.to_csv('C:/Users/anubh/Desktop/HousePred.csv')
